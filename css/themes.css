@@ -436,7 +436,7 @@
   background: #080510;
 }
 
-/* Background image — darkened to be a subtle hint */
+/* Background image with dot texture */
 [data-theme="arcade"] body::before {
   content: '';
   position: fixed;
@@ -445,19 +445,6 @@
   pointer-events: none;
   background: url('../assets/arcade-bg.png') center bottom / cover no-repeat;
   opacity: 0.28;
-}
-
-/* Dot texture overlay (Railway-style) */
-[data-theme="arcade"] body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.10;
-  background-image: url('../assets/dots-oxipng.png');
-  background-size: cover;
-  background-position: bottom;
 }
 
 [data-theme="arcade"] #app {
