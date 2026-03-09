@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="retro2">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta name="description" content="Free online guitar and bass tuner with real-time pitch detection. Tune your 6-string guitar or 5-string bass using your microphone. Supports Standard, Drop D, DADGAD, Open tunings and more.">
+  <meta name="keywords" content="guitar tuner, bass tuner, online tuner, chromatic tuner, free tuner, drop d tuner, standard tuning, pitch detection">
+  <title>Free Online Guitar | Automatic & Ear Tuning</title>
+  <link rel="canonical" href="">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Free Online Guitar | Automatic & Ear Tuning">
+  <meta property="og:description" content="Tune your guitar or bass instantly using your microphone. Real-time pitch detection with multiple tuning presets.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Free Online Guitar | Automatic & Ear Tuning">
+  <meta name="twitter:description" content="Tune your guitar or bass instantly using your microphone. Real-time pitch detection with multiple tuning presets.">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Guitar & Bass Tuner",
+    "description": "Free online guitar and bass tuner with real-time pitch detection using your microphone.",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Real-time pitch detection",
+      "6-string guitar tuning",
+      "5-string bass tuning",
+      "Multiple tuning presets",
+      "Reference tone playback",
+      "Works on mobile and desktop"
+    ]
+  }
+  </script>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎸</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Vanta.js dependencies (loaded async, used by Vanta themes) -->
+  <!-- three.js powers CELLS effect; p5.js powers TOPOLOGY effect -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.cells.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js" defer></script>
+</head>
+<body>
+  <!-- Vanta.js animated background container -->
+  <div id="vanta-bg" class="vanta-bg"></div>
+
+  <div id="app">
+
+    <!-- Header -->
+    <header class="tuner-header">
+      <h1 class="app-title">Guitar Tuner</h1>
+      <select id="theme-select" class="theme-select" aria-label="Select theme"></select>
+    </header>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar glass-layer-2">
+      <select id="instrument-select" class="controls-select" aria-label="Select instrument">
+        <option value="guitar">Guitar</option>
+        <option value="bass">Bass</option>
+      </select>
+      <select id="tuning-select" class="controls-select" aria-label="Select tuning"></select>
+      <button id="advanced-toggle" class="controls-btn" aria-expanded="false" aria-controls="advanced-panel">
+        <svg class="advanced-toggle-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        Advanced
+      </button>
+    </div>
+
+    <!-- Main Gauge Display -->
+    <section class="gauge-section glass-layer-1">
+      <div class="note-display">
+        <span id="detected-note" class="note-name">--</span>
+        <span id="detected-octave" class="note-octave"></span>
+      </div>
+      <div class="view-mode-toggle" id="view-mode-toggle">
+        <button class="view-mode-btn active" data-view="gauge">Gauge</button>
+        <button class="view-mode-btn" data-view="strobe">Strobe</button>
+      </div>
+      <div class="gauge-container" id="gauge-container">
+        <svg id="tuning-gauge" viewBox="0 0 300 180" aria-label="Tuning gauge"></svg>
+      </div>
+      <div id="strobe-container" class="strobe-container" style="display:none;">
+        <canvas id="strobe-canvas" aria-label="Strobe tuner display"></canvas>
+      </div>
+      <div class="cents-bar-container">
+        <div class="cents-bar-track">
+          <div id="cents-bar-fill" class="cents-bar-fill"></div>
+          <div class="cents-bar-center"></div>
+        </div>
+      </div>
+      <div class="frequency-display">
+        <span id="detected-freq">-- Hz</span>
+        <span id="detected-cents" class="cents-display">--</span>
+      </div>
+      <!-- In-Tune Indicator (top-right of gauge) -->
+      <div id="in-tune-overlay" class="in-tune-overlay hidden">
+        <div class="in-tune-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Strings -->
+    <section class="strings-section">
+      <div id="strings-container" class="strings-container"></div>
+    </section>
+
+    <!-- Advanced Settings Panel -->
+    <section class="advanced-section glass-layer-3" id="advanced-section">
+      <div class="advanced-panel" id="advanced-panel" hidden>
+
+        <button id="reset-defaults-btn" class="reset-defaults-btn">Reset to Defaults</button>
+
+        <!-- A4 Reference Frequency -->
+        <div class="setting-group">
+          <label class="setting-label">
+            <span class="label-with-help">Reference Pitch (A4) <span class="help-icon" data-tooltip="The frequency of the A above middle C. Standard concert pitch is 440 Hz. Some orchestras tune to 442 Hz, and some prefer 432 Hz for a warmer sound.">?</span></span>
+            <span class="setting-value" id="a4-value">440 Hz</span>
+          </label>
+          <input type="range" id="a4-slider" class="setting-slider" min="415" max="466" value="440" step="1">
+          <div class="setting-presets" id="a4-presets">
+            <button class="preset-btn" data-value="432">432</button>
+            <button class="preset-btn active" data-value="440">440</button>
+            <button class="preset-btn" data-value="441">441</button>
+            <button class="preset-btn" data-value="442">442</button>
+            <button class="preset-btn" data-value="443">443</button>
+          </div>
+        </div>
+
+        <!-- Cents Threshold -->
+        <div class="setting-group">
+          <label class="setting-label">
+            <span class="label-with-help">In-Tune Threshold <span class="help-icon" data-tooltip="How close to perfect pitch before the tuner shows green. Cents are 1/100th of a semitone — ±5 cents is a good default for most players.">?</span></span>
+            <span class="setting-value" id="threshold-value">&plusmn;5 cents</span>
+          </label>
+          <input type="range" id="threshold-slider" class="setting-slider" min="1" max="10" value="5" step="1">
+        </div>
+
+        <!-- Temperament -->
+        <div class="setting-group">
+          <label class="setting-label"><span class="label-with-help">Temperament <span class="help-icon" data-tooltip="The system used to divide an octave into notes. Equal temperament spaces all 12 notes evenly — standard for guitar. Other temperaments shift certain intervals to sound purer in specific keys.">?</span></span></label>
+          <select id="temperament-select" class="setting-select"></select>
+          <div class="setting-sub" id="temperament-key-group">
+            <label class="setting-label-small">Key Center</label>
+            <select id="temperament-key-select" class="setting-select-small">
+              <option value="C">C</option>
+              <option value="C#">C# / Db</option>
+              <option value="D">D</option>
+              <option value="D#">D# / Eb</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+              <option value="F#">F# / Gb</option>
+              <option value="G">G</option>
+              <option value="G#">G# / Ab</option>
+              <option value="A">A</option>
+              <option value="A#">A# / Bb</option>
+              <option value="B">B</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Custom Tuning Creator -->
+        <div class="setting-group">
+          <label class="setting-label">Custom Tuning</label>
+          <div class="custom-tuning-strings" id="custom-tuning-strings"></div>
+          <div class="custom-tuning-controls">
+            <button id="custom-add-string" class="small-btn">+ String</button>
+            <button id="custom-remove-string" class="small-btn">- String</button>
+          </div>
+          <div class="custom-tuning-save">
+            <input type="text" id="custom-tuning-name" class="setting-input" placeholder="Tuning name..." maxlength="30">
+            <button id="custom-tuning-save-btn" class="small-btn primary">Save</button>
+          </div>
+          <div id="custom-tuning-list" class="custom-tuning-list"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Mic Button -->
+    <button id="mic-btn" class="mic-button">
+      <svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+        <line x1="12" y1="19" x2="12" y2="23"></line>
+        <line x1="8" y1="23" x2="16" y2="23"></line>
+      </svg>
+      <span class="mic-text">Start Tuning</span>
+    </button>
+    <p class="focus-hint">Press Escape or tap outside to stop</p>
+
+    <!-- SEO Content: How to Use -->
+    <section class="seo-section how-to-use glass-layer-3">
+      <h2 class="seo-heading">How to Tune Your Guitar</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+          </div>
+          <h3 class="step-title">1. Allow Microphone</h3>
+          <p class="step-desc">Tap "Start Tuning" and grant microphone access when prompted by your browser.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <h3 class="step-title">2. Play a String</h3>
+          <p class="step-desc">Pluck a single string on your guitar or bass. The tuner will detect the note automatically.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3 class="step-title">3. Tune to Green</h3>
+          <p class="step-desc">Adjust the tuning peg until the gauge needle centers and turns green. You're in tune!</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO Content: Supported Tunings -->
+    <section class="seo-section supported-tunings glass-layer-3">
+      <h2 class="seo-heading">Supported Tunings</h2>
+      <div class="tunings-grid">
+        <div class="tuning-group">
+          <h3 class="tuning-group-title">Guitar</h3>
+          <ul class="tuning-list">
+            <li>Standard <span class="tuning-notes">E A D G B E</span></li>
+            <li>Drop D <span class="tuning-notes">D A D G B E</span></li>
+            <li>Half Step Down <span class="tuning-notes">Eb Ab Db Gb Bb Eb</span></li>
+            <li>DADGAD <span class="tuning-notes">D A D G A D</span></li>
+            <li>Open D <span class="tuning-notes">D A D F# A D</span></li>
+            <li>Open G <span class="tuning-notes">D G D G B D</span></li>
+            <li>Open E <span class="tuning-notes">E B E G# B E</span></li>
+          </ul>
+        </div>
+        <div class="tuning-group">
+          <h3 class="tuning-group-title">Bass</h3>
+          <ul class="tuning-list">
+            <li>5-String Standard <span class="tuning-notes">B E A D G</span></li>
+            <li>4-String Standard <span class="tuning-notes">E A D G</span></li>
+            <li>Drop D <span class="tuning-notes">B D A D G</span></li>
+            <li>Half Step Down <span class="tuning-notes">Bb Eb Ab Db Gb</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEO Content: Features -->
+    <section class="seo-section features-section glass-layer-3">
+      <h2 class="seo-heading">Why Use This Tuner</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 class="feature-title">Real-Time Detection</h3>
+          <p class="feature-desc">Instant pitch analysis using advanced autocorrelation. See results as you play.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <h3 class="feature-title">Works Everywhere</h3>
+          <p class="feature-desc">Use on your phone, tablet, or desktop. No app download required — just open and tune.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h3 class="feature-title">Multiple Tunings</h3>
+          <p class="feature-desc">Standard, Drop D, DADGAD, Open tunings, and more for both guitar and bass.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </div>
+          <h3 class="feature-title">6 Visual Themes</h3>
+          <p class="feature-desc">Switch between Retro, Studio, Studio V2, Glass, Neon, and Clean themes to match your style.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <p class="footer-text">Free online tuner built with the Web Audio API. No data is collected or stored.</p>
+    </footer>
+
+  </div>
+
+  <!-- In-Tune Bloom Effect -->
+  <div id="in-tune-bloom" class="in-tune-bloom" aria-hidden="true"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
