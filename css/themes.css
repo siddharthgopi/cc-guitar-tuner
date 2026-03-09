@@ -370,6 +370,187 @@
   --color-strobe-dark: rgba(12, 12, 14, 0.9);
 }
 
+/* ========== ARCADE ========== */
+[data-theme="arcade"] {
+  --color-bg-primary: #1a1030;
+  --color-bg-secondary: #221844;
+  --color-bg-card: rgba(30, 20, 60, 0.85);
+  --color-bg-card-hover: rgba(40, 28, 75, 0.9);
+
+  --color-text-primary: #e0d8f0;
+  --color-text-secondary: #8878aa;
+  --color-text-accent: #c080ff;
+
+  --color-accent: #c080ff;
+  --color-accent-rgb: 192, 128, 255;
+  --color-accent-secondary: #60ddff;
+  --color-danger: #ff4477;
+  --color-warning: #ffcc44;
+  --color-success: #44ff88;
+
+  --color-gauge-track: #2a1e4a;
+  --color-gauge-flat: #ff4477;
+  --color-gauge-sharp: #ffcc44;
+  --color-gauge-in-tune: #44ff88;
+  --color-gauge-needle: #e0d8f0;
+
+  --glow-accent: 0 0 16px rgba(192, 128, 255, 0.3);
+  --glow-strong: 0 0 32px rgba(192, 128, 255, 0.5);
+  --glow-accent-secondary: 0 0 16px rgba(96, 221, 255, 0.3);
+
+  --color-border: rgba(192, 128, 255, 0.2);
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.5);
+
+  --font-primary: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+  --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+
+  --color-string-active: #c080ff;
+  --color-string-inactive: #3a2a5a;
+  --color-string-bg: rgba(192, 128, 255, 0.08);
+
+  --color-btn-bg: rgba(40, 28, 75, 0.8);
+  --color-btn-bg-hover: rgba(55, 40, 95, 0.9);
+  --color-btn-active-bg: #c080ff;
+  --color-btn-active-text: #1a1030;
+
+  --color-select-bg: rgba(30, 20, 60, 0.9);
+  --color-select-border: rgba(192, 128, 255, 0.3);
+
+  --body-bg-extra: none;
+  --card-backdrop: none;
+  --card-border-style: 1px solid rgba(192, 128, 255, 0.15);
+
+  --color-strobe-light: rgba(192, 128, 255, 0.3);
+  --color-strobe-dark: rgba(26, 16, 48, 0.9);
+}
+
+/* Arcade skyline background */
+[data-theme="arcade"] body {
+  background:
+    var(--color-bg-primary);
+  overflow-x: hidden;
+}
+
+[data-theme="arcade"] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 25% 8%, rgba(192,128,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 40% 22%, rgba(255,255,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 55% 5%, rgba(96,221,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 65% 18%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 78% 12%, rgba(192,128,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 88% 25%, rgba(255,255,255,0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 15% 35%, rgba(96,221,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 35% 42%, rgba(255,255,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 50% 30%, rgba(255,255,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 70% 38%, rgba(192,128,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 92% 8%, rgba(255,255,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 5% 48%, rgba(255,255,255,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 82% 45%, rgba(96,221,255,0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 48% 52%, rgba(255,255,255,0.2) 50%, transparent 50%),
+    linear-gradient(180deg, #0e0820 0%, #1a1030 40%, #2a1848 70%, #1a1030 100%);
+  animation: arcade-stars 4s ease-in-out infinite alternate;
+}
+
+[data-theme="arcade"] body::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  z-index: 0;
+  pointer-events: none;
+  /* Pixel city skyline using layered gradients */
+  background:
+    /* Building row 1 - tallest */
+    linear-gradient(to right,
+      transparent 2%, #12082a 2%, #12082a 5%, transparent 5%,
+      transparent 8%, #0e0622 8%, #0e0622 11%, transparent 11%,
+      transparent 14%, #12082a 14%, #12082a 16%, transparent 16%,
+      transparent 22%, #0e0622 22%, #0e0622 26%, transparent 26%,
+      transparent 30%, #12082a 30%, #12082a 32%, transparent 32%,
+      transparent 38%, #0e0622 38%, #0e0622 42%, transparent 42%,
+      transparent 48%, #12082a 48%, #12082a 50%, transparent 50%,
+      transparent 55%, #0e0622 55%, #0e0622 58%, transparent 58%,
+      transparent 62%, #12082a 62%, #12082a 64%, transparent 64%,
+      transparent 70%, #0e0622 70%, #0e0622 74%, transparent 74%,
+      transparent 78%, #12082a 78%, #12082a 80%, transparent 80%,
+      transparent 85%, #0e0622 85%, #0e0622 89%, transparent 89%,
+      transparent 93%, #12082a 93%, #12082a 96%, transparent 96%
+    ) 0 30%/100% 100% no-repeat,
+    /* Windows - scattered lit windows */
+    radial-gradient(1.5px 1.5px at 3% 65%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 4% 72%, #c080ff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 9% 60%, #60ddff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 10% 70%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 23% 55%, #c080ff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 24% 65%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 25% 75%, #60ddff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 31% 62%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 39% 55%, #60ddff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 40% 68%, #c080ff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 41% 78%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 49% 60%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 56% 55%, #c080ff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 57% 68%, #60ddff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 63% 62%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 71% 55%, #60ddff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 72% 68%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 73% 78%, #c080ff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 79% 60%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 86% 55%, #c080ff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 87% 72%, #60ddff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 94% 58%, #ffcc44 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 95% 70%, #c080ff 50%, transparent 50%),
+    /* Ground / base layer */
+    linear-gradient(to top, #0a0618 0%, #0a0618 30%, transparent 30%),
+    /* Building silhouette base - shorter wide buildings */
+    linear-gradient(to right,
+      transparent 0%, #0e0822 0%, #0e0822 6%, transparent 6%,
+      transparent 7%, #100a28 7%, #100a28 18%, transparent 18%,
+      transparent 20%, #0e0822 20%, #0e0822 28%, transparent 28%,
+      transparent 29%, #100a28 29%, #100a28 34%, transparent 34%,
+      transparent 36%, #0e0822 36%, #0e0822 44%, transparent 44%,
+      transparent 46%, #100a28 46%, #100a28 52%, transparent 52%,
+      transparent 53%, #0e0822 53%, #0e0822 60%, transparent 60%,
+      transparent 61%, #100a28 61%, #100a28 68%, transparent 68%,
+      transparent 69%, #0e0822 69%, #0e0822 76%, transparent 76%,
+      transparent 78%, #100a28 78%, #100a28 84%, transparent 84%,
+      transparent 86%, #0e0822 86%, #0e0822 92%, transparent 92%,
+      transparent 94%, #100a28 94%, #100a28 100%
+    ) 0 52%/100% 100% no-repeat;
+  animation: arcade-windows 3s steps(2) infinite;
+}
+
+[data-theme="arcade"] #app {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes arcade-stars {
+  0% { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
+@keyframes arcade-windows {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.92; }
+}
+
 /* ========== GLASS DEPTH LAYERS ========== */
 [data-theme="glass"] .glass-layer-1 {
   backdrop-filter: blur(8px) saturate(1.6);

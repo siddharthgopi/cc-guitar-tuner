@@ -5,6 +5,7 @@ const THEMES = [
   { id: 'glass',   label: 'Glass',      icon: '◇' },
   { id: 'dark-neon', label: 'Neon',     icon: '◆' },
   { id: 'minimal', label: 'Clean',      icon: '○' },
+  { id: 'arcade',  label: 'Arcade',     icon: '▦' },
 ];
 const STORAGE_KEY = 'guitar-tuner-theme';
 

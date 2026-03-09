@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Simple HTTP server with no-cache headers for development."""
 import http.server
+import os
 import sys
 
 class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
@@ -11,7 +12,7 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
 if __name__ == '__main__':
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
+    port = int(os.environ.get('PORT', sys.argv[1] if len(sys.argv) > 1 else 8080))
     with http.server.HTTPServer(('', port), NoCacheHandler) as httpd:
         print(f'Serving on port {port} (no-cache)')
         httpd.serve_forever()
