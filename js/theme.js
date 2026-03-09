@@ -1,11 +1,11 @@
 const THEMES = [
+  { id: 'arcade',  label: 'Arcade',     icon: '▦' },
   { id: 'retro2',  label: 'Studio',     icon: '★' },
   { id: 'retro',    label: 'Retro',      icon: '■' },
-  { id: 'vanta3',  label: 'Studio V2',  icon: '◉' },
+  { id: 'vanta3',  label: 'Nexus',      icon: '◉' },
   { id: 'glass',   label: 'Glass',      icon: '◇' },
   { id: 'dark-neon', label: 'Neon',     icon: '◆' },
   { id: 'minimal', label: 'Clean',      icon: '○' },
-  { id: 'arcade',  label: 'Arcade',     icon: '▦' },
 ];
 const STORAGE_KEY = 'guitar-tuner-theme';
 
