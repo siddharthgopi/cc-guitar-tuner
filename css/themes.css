@@ -444,7 +444,7 @@
   z-index: 0;
   pointer-events: none;
   background: url('../assets/arcade-bg.png') center bottom / cover no-repeat;
-  opacity: 0.28;
+  opacity: 0.38;
 }
 
 [data-theme="arcade"] #app {
